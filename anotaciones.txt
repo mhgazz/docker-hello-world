@@ -1,0 +1,62 @@
+para configurar un liberty profile local
+----------------------------------------
+
+descargar, descomprimir
+
+instalar admin center
+bin/installUtility install adminCenter-1.0
+
+
+editar archivo
+usr/servers/defaultServer/server.xml
+
+agregar las líneas
+<featureManager>
+	<feature>adminCenter-1.0</feature>
+</featureManager>
+<quickStartSecurity userName="admin" userPassword="admin" />
+<keystore id="defaultKeyStore" password="keystorePwd" />
+
+reiniciar
+bin/server stop
+bin/server start
+
+probar con browser
+https://localhost:9443/adminCenter   admin/adminPwd
+
+probar con logs
+usr/servers/defaultServer/logs
+
+copiar el archivo war de ejemplo en 
+/usr/wlp/usr/servers/defaultServer/dropins
+ingresar a la consola web adminCenter > explore > applications
+una nueva aplicación de nombre Hello-World debe aparecer
+en el navegador probar
+http://localhost:9080/Hello-World/
+
+
+variables de entorno y paths
+----------------------------------------------
+installation directory : ${wlp.install.dir}  --> valor inferido si no se setea en server.env
+instancia del servidor : ${server.config.dir}
+instalación de aplicaciones: ${server.config.dir}/dropins
+variables de entorno : ./usr/servers/defaultServer/server.env
+
+
+crear container de liberty
+--------------------------
+docker pull websphere-liberty  <--- obtener imagen base
+crear docker file
+exportar wae 
+docker build . -t hello-world/liberty:lastest  --> genera una nueva capa sobre la imagen
+docker run -d -p 9081:9080 52633bc7eebd  --> ejecutar imagen creada vista port 9081
+docker exec -it a0a0a35ba626 /bin/bash  --> conectar a una container en ejecución por ssh	
+
+crear container de MQ
+----------------------------
+docker pull ibmcom/mq:latest
+docker volume create qm1data
+docker network create mq-demo-network
+docker run --env LICENSE=accept --env MQ_QMGR_NAME=QM1 --volume qm1data:/mnt/mqm --publish 1414:1414 --publish 9443:9443 --network mq-demo-network --network-alias qmgr --detach --env MQ_APP_PASSWORD=/your password here/ ibmcom/mq:latest  <-- run mq en docker
+docker run -d -p 9081:9080 --network mq-demo-network --network-alias appserver hello-world/liberty:lastest <-- run liberty en docker
+
