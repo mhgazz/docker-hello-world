@@ -1,0 +1,267 @@
+Taller de docker y containers
+
+requisitos preliminares participar:
+- instalación de docker en el PC de cada asistente   https://docs.docker.com/install/
+- descargar materiales de repositorio github   https://github.com/mhgazz/docker-hello-world
+
+Adicionales:
+- sala o auditorio con pantalla o poyector
+
+objetivos
+- recibir conocimiento básico sobre la tecnología contenedores.
+- aprender lo básico sobre Docker en cuanto funcionamiento, CLI, generación de imágenes, operación.
+- utilización de Docker con productos de capa media de IBM
+
+contenidos
+------------------
+conceptos básicos: contenedores, diferencias con VMs, usos, ventajas, tecnologías, uso en la nube (20 minutos)
+docker: componentes, arquitectura, repositorio, imagenes, comandos básicos, contenerización de aplicaciones, 2 laboratorios (40 minutos)
+docker y productos de capa media: liberty profile y mq, montar un aplicación con java y mq, 3 laboratorios (2 hs)
+duración total: 3hs 3min breaks incluídos
+
+
+Estructuración de los contenidos:
+parte conceptual - 20 minutos
+--------------------------------------
+lamina 01 : que es un contenedor
+lamina 02 : diferencias con una VM
+lamina 03 : para que se usa, ventajas
+lamina 04 : tecnologías de contenedores
+lamina 05 : contenedores y la nube
+
+docker - 40 minutos
+--------------------------------------
+lamina 06 : componentes de docker, arquitectura y docker
+lamina 07 : el repositorio, imagenes
+lamina 08 : comandos básicos
+laboratorio 1: pull y ejecución de hello world de docker, logonearse al contenedor, imagenes  --> documentación oficial de Docker
+lamina 09 : cómo se monta un docker, las capas de docker, 
+lamina 10 : estructura un dockerfile
+laboratorio 2: pull de imagen base linux e instalación de aplicación web python o node.js, push de imagen resultante   --> documentación de IBM cloud
+
+break 10 minutos
+
+docker y productos de capa media  - 2 hrs
+---------------------------------------
+lamina 11 : dockerfile de liberty profile en dockerhub
+laboratorio 3: revisión de dockerfile, pull de imagen de liberty, agregar consola web y regenerar imagen    ---> propio de nosotros
+
+lamina 12 : dockerfile de IBM MQ en dockerhub
+laboratorio 4: revisión de dockerfile, pull de imagen y experimientos      ---> badge de MQ developer
+
+break 10 minutos
+
+lamina 13 : cómo trabajan en conjunto varias imágenes, redes en docker
+laboratorio 5: instalar aplicación web cliente de MQ en container de liberty, crear red, crear cola en MQ, probar app web     ---> propio de nosotros
+
+lamina 14 : cómo poner en cluster, kubernetes y helm (antojo para la próxima)
+
+----------------------------------------
+duración total: 3hs 3min breaks incluídos
+
+fuentes:
+---------
+Docker intro https://docs.docker.com/get-started/
+acclaim DL09300G
+Badge MQ developer  https://developer.ibm.com/messaging/learn-mq/mq-tutorials/mq-dev-essentials/
+
+
+detalle de láminas y laboratorios
+
+lamina 01
+---------------
+A standard way to package an application and all its dependencies so that it can be moved between environments and run without changes
+Containers work by isolating the differences between applications inside the container so that everything outside the container can be standardized.
+
+Containers have actually been around for awhile. LXC (Linux Containers) were introduced nearly a decade ago but their use was, for obvious reasons, limited mainly to Linux developers. Containers did not catch on right away because, although a powerful technology, they can also be difficult to use. But that changed with Docker, the open source container platform that makes container technology easy to use. And that arguably jump-started the current microservices revolution.
+
+Containers decouple applications from operating systems, which means that users can have a clean and minimal Linux operating system and run everything else in some form of containers. Also, because a container offers a convenient unit to encapsulate a small application component, it becomes an infrastructure of choice for building micro-service applications, which enables more manageable application infrastructure and continuous application deliveries.
+
+A container consists of an entire runtime environment bundled into one package. It consists of:
+- an application
+- all its dependencies, libraries and other binary files
+- configuration files that are needed to run it 
+By containerizing the application platform and its dependencies, differences in operating system distributions and underlying infrastructure are abstracted away.
+
+
+lamina 02
+--------------
+Containers and virtual machines have similar resource isolation and allocation benefits, but function differently because containers virtualize the operating system instead of hardware, containers are more portable and efficient. With virtualization technology, the package that can be passed around is a virtual machine and it includes an entire operating system and the application. A physical server that is running three virtual machines would have a hypervisor and three separate operating systems that is running on top of it.
+By contrast a server that is running three containerized applications as with Docker runs a single operating system, and each container shares the operating system kernel with the other containers. Shared parts of the operating system are read only, while each container has its own mount (for example, a way to access the container) for writing. That means the containers are much more lightweight and use far fewer resources than virtual machines. 
+
+
+lamina 03
+--------------
+Containers are agile
+Containers are small
+Containers are portable
+Developers can use containers to pack, ship, and run any application as a lightweight, portable, self-sufficient LXC container that can run virtually anywhere. The application is ready for the cloud.
+
+lamina 04
+---------------
+Docker
+The most common standard, made Linux containers usable by the
+masses
+Rocket (rkt)
+An emerging container standard from CoreOS, the company that
+developed etcd
+Garden
+The format Cloud Foundry builds using buildpacks
+Open Container Initiative (OCI)
+A Linux Foundation project developing a governed container
+standard
+
+lamina 05
+------------------
+Los contenedores se pueden ejecutar virtualmente en cualquier lugar, lo cual facilita en gran medida el desarrollo y la implementación en los sistemas operativos Linux, Windows y Mac; en máquinas virtuales o equipos físicos; en la máquina del desarrollador o en centros de datos locales, y, por supuesto, en la nube pública. La gran popularidad del formato de imagen de Docker para los contenedores ayuda aún más con la portabilidad. Donde sea que quieras ejecutar tu software, puedes usar contenedores.
+
+
+lamina 06
+------------------
+Docker is an open source project that was released by dotCloud in 2013. Built on features of existing Linux container technology (LXC), Docker became a software platform for building, testing, deploying, and scaling apps quickly. Like with any container technology, as far as the program is concerned, it has its own file system, storage, CPU, RAM, and so on. The key difference between containers and VMs is that while the hypervisor abstracts an entire device, containers just abstract the operating system kernel.
+
+Image         : A read-only snapshot of a container stored in Docker Hub to be used as a template for building containers
+container     : instancias de una imagen, pueden haber múltiples al tiempo
+Registry      : Stores, distributes, and shares container images
+Docker Engine : A program that creates, ships, and runs application containers. Runs on any physical and virtual machine or server locally, in private or public cloud
+Client communicates with Engine to execute commands The layer between the containers and the Linux OS. Docker daemon is the persistent runtime environment that manages application containers.
+
+
+lamina 07
+------------------
+https://docs.docker.com/get-started/
+
+Docker images are read-only templates from which Docker containers are instantiated. Each image consists of a series of layers. Docker uses union file systems to combine these layers into a single image. Union file systems allow files and directories of separate file systems, which are known as branches, to be transparently overlaid, forming a single coherent file system. 
+Image is an executable package that includes everything needed to run an application--the code, a runtime, libraries, environment variables, and configuration files.
+A container is a runtime instance of an image--what the image becomes in memory when executed (that is, an image with state, or a user process). You can see a list of your running containers with the command, docker ps, just as you would in Linux.
+
+lamina 08
+-------------------
+comandos básicos 
+image ls
+run
+exec
+stop
+logs
+ps
+
+
+laboratorio 1
+------------------
+trabajar con la imagen hello-world de docker
+ejecutar en línea de comando
+docker image ls           --> verificar imagenes
+docker run hello-world    --> ejecutar imagen
+docker image ls           --> verificar imagenes nuevamente, hay una nueva
+
+
+lamina 09
+-----------------
+Every image starts from a base image, such as Ubuntu, a base Ubuntu image, or Fedora, a base Fedora image. You can also use images of your own as the basis for a new image. For example, you have a base Tomcat image which you might use as the base of all your web application images.
+
+Mmultiple layers: a kernel, an operating system, a layer, such as a websphere-liberty profile, and several applications. 
+ 
+Layers are one of the reasons Docker is so lightweight. When you change a Docker image, such as when you update an application to a new version, a new layer is built and replaces only the layer it updates. The other layers remain intact. To distribute the update, you only need to transfer the updated layer. Layering speeds up distribution of Docker images. Docker determines which layers need to be updated at runtime.
+
+All the layers in an image are read-only layers, except the top layer which is a writable container layer. A storage driver handles the details about the way these layers interact with each other. When you start a container (or multiple containers from the same image), Docker only creates the thin writable container layer. All writes to the container that add new or modify existing data are stored in this writable layer. When the container is deleted, the writable layer is also deleted. The underlying image remains unchanged.
+
+
+lamina 10
+-----------------
+antes $ docker pull python:2.7-slim
+Docker puede construir imágenes automáticamente, leyendo las instrucciones indicadas en un fichero Dockerfile. Se trata de un documento de texto que contiene todas las órdenes a las que un usuario dado puede llamar, desde la línea de comandos, para crear una imagen
+Se ustiliza el comando build.
+Dockerfile de ejemplo de python en https://docs.docker.com/get-started/part2/
+"Contenerizar" una aplicación significa introducir nuestra aplicación en una imagen que le sirva de ambiente de ejecución.
+
+Laboratorio 2
+----------------
+objetivo Contenerizar una aplicación en https://docs.docker.com/get-started/part2/
+revisar los archivos en el proyecto y explicar que hace cada uno
+
+$ docker build -t python-sample:latest .
+notar que no se descarga la imagen de nuevo
+$ docker run -d -p 4000:80 python-sample:latest   <--- puerto 80 en el 4000
+$ docker logs CONTAINER
+$ docker exec -it CONTAINER /bin/bash
+
+para terminar antes del break 
+$ docker pull websphere-liberty
+
+
+BREAK
+
+
+lamina 11
+----------------
+ir a dockerhub, buscar liberty y examinar dockerfile 
+
+
+laboratorio 3
+----------------
+pull de imagen de websphere-liberty
+$ docker pull websphere-liberty
+
+ejecutar, docker run
+$ docker run -d -p 80:9080 -p 443:9443 websphere-liberty:latest
+$ docker logs CONTAINER
+
+ver pagina de bienvenida
+http://localhost
+docker exec -it 0c8b57b554aa /bin/bash
+
+revisión de dockerfile
+agregar consola web al server.xml
+
+FROM websphere-liberty:kernel
+COPY --chown=1001:0  server.xml /config/
+RUN installUtility install --acceptLicense defaultServer
+
+build de la imagen
+$ docker build -t websphere-liberty .
+$ docker run -d -p 80:9080 -p 443:9443 websphere-liberty:lastest
+https://localhost/adminCenter   admin/adminPw
+
+
+lamina 12
+--------------------
+examinar en docker hub la documentación de ibmcom/mq y el docker file
+
+
+laboratorio 4
+---------------------
+poner a funcionar un contenedor de MQ
+$ docker pull ibmcom/mq:latest
+ver imagenes locales
+$ docker volume create qm1data   <-- unidad lógica o volumen persistente que sobrevive a los contenedores
+$ docker run --env LICENSE=accept --env MQ_QMGR_NAME=QM1 --volume qm1data:/mnt/mqm --publish 1414:1414 --publish 9443:9443 --detach --env MQ_APP_PASSWORD=1234 ibmcom/mq:latest
+verificar procesos docker
+$ docker exec -it CONTAINER /bin/bash
+lanzar comandos mq: dspmqver, dspmq, runmqsc
+
+
+lamina 13
+-------------------
+los contenedores a fin de poder configurar un servicio deben de tener la habilidad de interactuar entre si. 
+Cómo trabajan en conjunto varias imágenes, redes en docker ?
+comando docker network
+$ docker network create mq-demo-network
+
+
+laboratorio 5
+--------------------
+combinación de lo visto en el laboratorio 4 y 5 para montar una aplicación java que interactúe con MQ.
+
+volver a lanzar contenedor de MQ
+$ docker network create mq-demo-network   ---> CREAR una red
+$ docker run --env LICENSE=accept --env MQ_QMGR_NAME=QM1 --volume qm1data:/mnt/mqm --publish 1414:1414 --publish 9443:9443 --network mq-demo-network --network-alias qmgr --detach --env MQ_APP_PASSWORD=1234 ibmcom/mq:latest
+observar los nuevos parámetros de red
+
+contenerizar una aplicación web en java con liberty
+examinar Dockerfile
+$ docker build . -t hello-world/liberty:lastest
+$ docker run -d -p 9081:9080 --network mq-demo-network hello-world/liberty:lastest
+$ docker exec -it CONTAINER /bin/bash
+examinar código fuente del cliente MQ JmsPutGetodocker.java parámetros de conexión
+
+probar http://localhost:9081/Hello-World/HelloWorldServlet
