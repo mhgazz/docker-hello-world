@@ -5,12 +5,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hello-World</title>
+<link rel="stylesheet" media="all" href="css/w3.css" />
+<title>Docker Hello-World</title>
 </head>
 <body>
+<h1>Bienvenido</h1>
 <%=new GregorianCalendar().get(Calendar.HOUR_OF_DAY)%>:
 <%=new GregorianCalendar().get(Calendar.MINUTE)%>:
 <%=new GregorianCalendar().get(Calendar.SECOND)%>
 <h1>Good <% if (new GregorianCalendar().get(Calendar.HOUR_OF_DAY) < 12) {%>Morning<% } else { %>Afternoon<% } %></h1>
+Esta es una prueba de concepto de tecnología de contenedores.<br/>
+<a href="HelloWorldServlet">Comenzar</a>
 </body>
 </html>

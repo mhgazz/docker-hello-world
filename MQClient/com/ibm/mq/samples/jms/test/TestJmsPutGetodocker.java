@@ -1,23 +1,22 @@
 package com.ibm.mq.samples.jms.test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.ibm.mq.samples.jms.JmsPutGetodocker;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestJmsPutGetodocker {
+import com.ibm.mq.samples.jms.JmsPutGetodocker;
+
+public class TestJmsPutGetodocker {
 
 	JmsPutGetodocker jms = null;
-	
 	@BeforeEach
 	void setUp() throws Exception {
 		jms = new JmsPutGetodocker();
 	}
 
 	@Test
-	void test() {
+	void putMessageTest() {
 		jms.putMessage("jelou");
+		jms.putMessage("chatuma");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {

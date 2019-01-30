@@ -54,7 +54,8 @@ public class JmsPutGetodocker {
 	private static int status = 1;
 
 	// Create variables for the connection to MQ
-	private static final String HOST = "qmgr";
+	//private static final String HOST = "qmgr";
+	private static final String HOST = "localhost";
 	private static final int PORT = 1414; // Listener port for your queue manager
 	private static final String CHANNEL = "DEV.APP.SVRCONN"; // Channel name
 	private static final String QMGR = "QM1"; // Queue manager name
@@ -92,11 +93,15 @@ public class JmsPutGetodocker {
 			destination = context.createQueue("queue:///" + QUEUE_NAME);
 
 			consumer = context.createConsumer(destination); 
-			String receivedMessage = consumer.receiveBody(String.class, 15000); // in ms or 15 seconds
-
-			System.out.println("\nReceived message:\n" + receivedMessage);
-			recordSuccess();
-			return receivedMessage;
+			StringBuffer receivedMessage = new StringBuffer();
+			String msgTxt = null;
+			do {
+				msgTxt = consumer.receiveBody(String.class, 150);
+				if (msgTxt!=null) receivedMessage.append("| " + msgTxt);
+				System.out.println("\nReceived message:\n" + receivedMessage);
+				recordSuccess();
+			} while (msgTxt!=null);
+			return receivedMessage.toString();
 		} catch (JMSException jmsex) {
 			recordFailure(jmsex);
 			return null;
@@ -138,8 +143,8 @@ public class JmsPutGetodocker {
 			context = cf.createContext();
 			destination = context.createQueue("queue:///" + QUEUE_NAME);
 
-			long uniqueNumber = System.currentTimeMillis() % 1000;
-			TextMessage message = context.createTextMessage(messageText + " | Your lucky number today is " + uniqueNumber);
+			//long uniqueNumber = System.currentTimeMillis() % 1000;
+			TextMessage message = context.createTextMessage(messageText);
 
 			producer = context.createProducer();
 			producer.send(destination, message);

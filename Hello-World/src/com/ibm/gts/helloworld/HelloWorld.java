@@ -26,18 +26,39 @@ public class HelloWorld extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("<html>");
+		response.getWriter().append("<head>");
+			response.getWriter().append("<link rel=\"stylesheet\" href=\"css/w3.css\">");
+		response.getWriter().append("</head><body>");
+		response.getWriter().append("<table><tr><td>");
+		response.getWriter().append("<img src=\"images/envelope.jpeg\"/></td><td><p>Ingrese un mensaje");
+		response.getWriter().append("<form method=\"POST\" action=\"HelloWorldServlet\">");
+			response.getWriter().append("mensaje <input type=\"text\" name=\"message\">");
+			response.getWriter().append("&nbsp;&nbsp;<input type=\"submit\" value=\"Enviar\">");
+		response.getWriter().append("</form");
+		response.getWriter().append("&nbsp;<form method=\"GET\" action=\"HelloWorldServlet\">");
+			response.getWriter().append("<input type=\"submit\" value=\"Ver mensajes\">");
+		response.getWriter().append("</form");
+		
 		// TODO Auto-generated method stub
 		JmsPutGetodocker jms = new JmsPutGetodocker();
-		jms.putMessage(" pepa ");
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String message = jms.getMessage();
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		response.getWriter().append(message);
+		String messageParam = request.getParameter("message");
+		if (messageParam==null || messageParam.isEmpty()) {
+			String message = jms.getMessage();
+			response.getWriter().append("<br/><br/>");
+			response.getWriter().append("<p>mensajes recibidos:  ");
+			if (message!=null) response.getWriter().append(message);
+		}
+		response.getWriter().append("</td></tr></table>");
+		response.getWriter().append("</body><html>");
+
+
 	}
 
 	/**
@@ -45,6 +66,9 @@ public class HelloWorld extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String messageParam = request.getParameter("message");
+		JmsPutGetodocker jms = new JmsPutGetodocker();
+		jms.putMessage(" " + messageParam + " ");		
 		doGet(request, response);
 	}
 
