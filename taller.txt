@@ -1,6 +1,7 @@
 Taller de docker y containers
 
 requisitos preliminares participar:
+
 - instalación de docker en el PC de cada asistente   https://docs.docker.com/install/
 - descargar materiales de repositorio github   https://github.com/mhgazz/docker-hello-world
 
